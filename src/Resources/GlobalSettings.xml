@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<settings>
+  <!--
+    (Optional) Specifies where the settings class file should be outputted and the options for it.
+    * leave this node out if you dont want to generate a settings file 
+    Options, [*] = required attribute:
+      [*] name - The name of the file you would like to output. e.g. MySettings 
+      [*] namespace - The namespace for the generated settings class. e.g. MyProject.Common
+       *  directory - The directory relative to the exe file where the settings class should be created
+       *  excludeazure - Setting this to true will prevent references to Azure libs and azure specific code
+  -->
+  <!--e.g.
+  <settingsClass name="MySettings" namespace="MyProject.Common" directory="SettingsClass" ></settingsClass>
+  -->
+  <settingsClass name="MySettings" namespace="MyProject.Common" directory="SettingsClass" ></settingsClass>
+  <staticClass name="ConfigurationManager" namespace="MyProject.Common" directory="SettingsClass" ></staticClass>
+  <!-- 
+    (Required) Specifies all the projects that you want settings generated for 
+    Options, [*] = required attribute:
+      [*] projectName - The name of the project you would like to generate files for
+       * projectDirectory - The directory where the project folder is contained relative to the exe
+       * azureProjectName - The name of the azure project that this project is a part of
+       * azureProjectDirectory - The directory where the azure project folder is contained relative to the exe
+  -->
+	<projects>
+    <!--e.g.
+    <project projectName="MyProject.Admin" azureProjectName="MyProject.Cloud.BackOffice"/>
+		<project projectName="MyProject.Public" azureProjectName="MyProject.Cloud.Public"/>
+    -->
+    <project projectName="MyProject.Admin" azureProjectName="MyProject.Cloud.BackOffice"/>
+    <project projectName="MyProject.Public" azureProjectName="MyProject.Cloud.Public"/>
+	</projects>
+  <!-- 
+    (Optional) Specifies which project configuration maps to which azure configuration.
+    This is only needed if you dont want to use dev config for local and live config for cloud
+      [*] name - the name of the local environment config
+      [*] target - the name of the cloud config that it maps too
+  -->
+	<mappings>
+    <!--e.g.
+		<map name="dev" target="Local"/>
+		<map name="live" target="Cloud"/>
+    -->
+	</mappings>
+  <environmentMappings>
+        <map name="Puma" target="Live"/> 
+        <map name="Demo" target="Staging"/>
+        <map name="PumaHistoric" target="Live"/>
+  </environmentMappings>
+  <!--
+    (Required) specifies a setting to use
+    [*] name - name of the setting
+     *  default - default value of the setting
+     *  dev - overriden value for dev
+     *  qa - overriden value for qa
+     *  staging - overriden value for staging
+     *  live - overriden value for live
+     *  type - the type that the value should be parsed too (default is string if left blank)
+     *  autogen = true/false value specifying if this setting should be auto generated in the settings class (default is true)
+     *  azureExclude - true/false specify if this value should be used in the azure files (default is true)
+     *  azureDefinitionExclude - true/false specify if this value should be used in the azure definition files (default is true)
+     *  delimiter - for a list of escaped xml codes, go to http://tntluoma.com/sidebars/codes/
+     By default the settings will be applied to all projects specified, however if desired, each key can have a project child node.
+     This child node will overide the default settings for that particulare project, the attributes are:
+     [*] name - name of the project
+     *  default - default value of the setting in this project
+     *  dev - overriden value for dev in this project
+     *  qa - overriden value for qa in this project
+     *  staging - overriden value for staging in this project
+     *  live - overriden value for live
+  -->
+	<appSettings>
+    <key name="Environment" dev="Dev" qa="QA" staging="Staging" live="Live"/>
+    <key name="ExceptionEmailSubject">
+      <project name="MyProject.Admin" default="MyProject Admin Exception"></project>
+      <project name="MyProject.Public" default="MyProject Public Exception"></project>
+    </key>
+		<key name="ClientValidationEnabled" dev="true" qa="true" staging="true" live="true" type="bool" autogen="true"/>
+    <key name="UnobtrusiveJavaScriptEnabled" demo="true" staging="false" default="true" />
+    <key name="NullableIntTest" default="5" type="int?" puma="6" />
+    
+    <!--<key name="NullableIntTest" default="5" type="int?" />
+    <key name="ExceptionEmailSubject">
+      <project name="MyProject.Admin" default="MyProject Admin Exception"></project>
+      <project name="MyProject.Public" default="MyProject Public Exception"></project>
+    </key>
+    <key name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" default="UseDevelopmentStorage=true" azureDefinitionExclude="true" />
+    <key name="ListTest" default="a;b;c;d;e;f" delimiter=";" type="List&lt;string&gt;" />
+    <key name="IntListTest" default="1;2;3;4;5;6" delimiter=";" type="List&lt;int&gt;" />
+    <key name="NullableIntListTest" default="1;2;3;null;5;6" delimiter=";" type="List&lt;int?&gt;" />
+    <key name="ArrayTest" default="a,b,c,d,e,f" type="string[]"  />-->
+	</appSettings>
+</settings>
