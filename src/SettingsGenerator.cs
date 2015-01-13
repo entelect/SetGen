@@ -25,20 +25,28 @@ namespace SetGen
             XDocument document = XDocument.Load(filePath,LoadOptions.SetLineInfo|LoadOptions.PreserveWhitespace);
             Console.WriteLine("Getting projects & Azure modules from xml");
             IEnumerable<Project> projects = GetAzureModulesFromXml(document);
+
             Console.WriteLine("Getting Azure mappings from xml");
             IEnumerable<AzureMapping> mappings = GetAzureMappingsFromXml(document);
+
             Console.WriteLine("Getting App settings from xml");
             IEnumerable<XmlAppSetting> appSettings = GetAppSettingsFromXml(document);
+
             Console.WriteLine("Getting settings class settings from xml");
             SettingsClass settingsClassSettings = GetSettingsClassSettingsFromXml(document, "settingsClass");
+
             Console.WriteLine("Getting static settings class settings from xml");
             SettingsClass staticClassSettings = GetSettingsClassSettingsFromXml(document, "staticClass");
+
             Console.WriteLine("Generating Azure files");
             CreateAzureFiles(appSettings, projects, mappings);
+
             Console.WriteLine("Generating environment settings files");
             CreateEnvironmentSettings(appSettings, projects);
+
             Console.WriteLine("Generating settings class");
             CreateSettingsClass(appSettings, settingsClassSettings);
+
             Console.WriteLine("Generating static settings class");
             CreateStaticSettingsClass(appSettings, staticClassSettings, settingsClassSettings);
         }
@@ -210,28 +218,17 @@ namespace SetGen
             switch (fileType)
             {
                 case AzureFile.Definition:
-                    SaveDefinitionSettings(document, appSettings, configSettingsNodes, filePath,
-                                                settingQualifiedName);
+                    SaveDefinitionSettings(document, appSettings, configSettingsNodes, filePath, settingQualifiedName);
                     break;
+
                 case AzureFile.Local:
-                    Environment environment = Environment.Dev;
-                    var mapping = mappings.Where(m => m.Target.Equals("Local", StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-                    if (mapping != null)
-                    {
-                        environment = EnumExtensions.Parse<Environment>(mapping.Name);
-                    }
-                    SaveActualSettings(document, appSettings, configSettingsNodes, filePath,
-                                       settingQualifiedName, project, environment.ToString());
+                    var mapping = mappings.FirstOrDefault(m => m.Target.Equals("Local", StringComparison.OrdinalIgnoreCase));
+                    SaveActualSettings(document, appSettings, configSettingsNodes, filePath, settingQualifiedName, project, mapping.Name);
                     break;
+
                 case AzureFile.Cloud:
-                    environment = Environment.Live;
-                    var cloudMapping = mappings.Where(m => m.Target.Equals("Cloud", StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-                    if (cloudMapping != null)
-                    {
-                        environment = EnumExtensions.Parse<Environment>(cloudMapping.Name);
-                    }
-                    SaveActualSettings(document, appSettings, configSettingsNodes, filePath,
-                                       settingQualifiedName, project, environment.ToString());
+                    var cloudMapping = mappings.FirstOrDefault(m => m.Target.Equals("Cloud", StringComparison.OrdinalIgnoreCase));
+                    SaveActualSettings(document, appSettings, configSettingsNodes, filePath, settingQualifiedName, project, cloudMapping.Name);
                     break;
                 default: throw new ArgumentOutOfRangeException(string.Format("Unknown enum value \"{0}\"", fileType));
             }

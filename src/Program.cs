@@ -9,7 +9,20 @@ namespace SetGen
     class Program
     {
         private static string _version;
+        private const string SetGen = @"
+ ██████ ▓█████▄▄▄█████▓  ▄████ ▓█████  ███▄    █ 
+▒██    ▒ ▓█   ▀▓  ██▒ ▓▒ ██▒ ▀█▒▓█   ▀  ██ ▀█   █ 
+░ ▓██▄   ▒███  ▒ ▓██░ ▒░▒██░▄▄▄░▒███   ▓██  ▀█ ██▒
+  ▒   ██▒▒▓█  ▄░ ▓██▓ ░ ░▓█  ██▓▒▓█  ▄ ▓██▒  ▐▌██▒
+▒██████▒▒░▒████▒ ▒██▒ ░ ░▒▓███▀▒░▒████▒▒██░   ▓██░
+▒ ▒▓▒ ▒ ░░░ ▒░ ░ ▒ ░░    ░▒   ▒ ░░ ▒░ ░░ ▒░   ▒ ▒ 
+░ ░▒  ░ ░ ░ ░  ░   ░      ░   ░  ░ ░  ░░ ░░   ░ ▒░
+░  ░  ░     ░    ░      ░ ░   ░    ░      ░   ░ ░ 
+      ░     ░  ░              ░    ░  ░         ░                                           
+";
+
         private const string BEER = 
+
 @"  _.._..,_,_    _.._..,_,_     _.._..,_,_
  (          )  (          )   (          )
   ]~,'-.-~~[    ]~,'-.-~~[     ]~,'-.-~~[
@@ -28,10 +41,11 @@ namespace SetGen
                 Console.WriteLine(_divider);
                 Console.WriteLine("Welcome to SetGen version :{0}", _version);
                 Console.WriteLine("Written by Ryan Kotzen and Rishal Hurbans (with an insignificant contribution by Matthew Butler)");
-                Console.WriteLine("Insignificant contributions by Matthew Butler");
+                Console.WriteLine("Insignificant contributions by Matthew Butler, Joshua Goodman and Jason Baldwin");
                 Console.WriteLine("Moral support from Bradley van Aardt");
                 Console.WriteLine(_divider);
                 Console.WriteLine(BEER);
+                Console.WriteLine(SetGen);
                 Console.WriteLine(_divider);
                 Dictionary<ArgumentsEnum, string> arguments = ProcessArgs(args);
                 SetWorkingDirectory(arguments);
